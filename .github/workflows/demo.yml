@@ -26,15 +26,23 @@ jobs:
       - name: Build website
         run: npm run build
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4 #This Action allows me to get the artifact packages.
         with:
           name: dist-files
-          path: |
-            dist
-            package.json
+          path: dist
+          # path: |
+          #   dist
+          #   package.json
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files #This name must be match with the name specified in "Upload artifacts step".
+                           #This allows to download the correct artifact.
+      - name: Output contents
+        run: ls
       - name: Deploy
         run: echo "Deploying..."
